@@ -5,6 +5,12 @@ syntax on
 filetype plugin indent on
 
 
+"COPY/PASTE
+"----------
+"Increases the memory limit from 50 lines to 1000 lines
+:set viminfo='100,<1000,s10,h
+
+
 "SOURCING:
 "---------
 "Automatically reloads .vimrc on write (w)
@@ -48,6 +54,24 @@ set hlsearch
 set ignorecase
 set smartcase
 
+"Control P file search
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+"List of functions in the current file using Tagbar plugin
+nnoremap <C-t> :TagbarToggle<CR>
+"Make the cursor go to Tagbar window when it opens
+let g:tagbar_autofocus = 1
+
+"List of functions in the current file using Taglist plugin
+"Use CNTRL + t to open Taglist Window
+nnoremap <C-t><C-l> :TlistToggle<CR>
+"Makes it so the cursor appears in the Taglist window when it's opened
+let Tlist_GainFocus_On_ToggleOpen = 1
+"Closes Taglist window if main window closes
+let Tlist_Exit_OnlyWindow = 1
+"Use the correct Ctags, which is required for taglist and tagbar
+let Tlist_Ctags_Cmd='/usr/local/bin/ctags'
+
 
 "WHITESPACE:
 "-----------
@@ -71,12 +95,14 @@ set background=dark
 
 "NERDTree (File structure):
 "--------------------------
-autocmd VimEnter * NERDTree
-autocmd BufWinEnter * NERDTreeMirror
+"autocmd VimEnter * NERDTree
+"autocmd BufWinEnter * NERDTreeMirror
 
 "makes NERDTree close automatically if it's the last thing open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
+"allows NERDTree to open/close using CNTRL+n
+nnoremap <C-n> :NERDTreeToggle<CR>
 
 "INDENTATION:
 "------------
@@ -88,7 +114,7 @@ vnoremap > >gv
 
 "PHP:
 "----
-"Auto Completion (OmniCompletion) 
+"Auto Completion (OmniCompletion)
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 
 
@@ -108,4 +134,9 @@ if has("autocmd")
 endif
 syntax on
 "Adds autocompletion via OmniCompletion for Drupal classes, constant definitions, functions, and interfaces
+"User CNTRL+P to access
 :set tags=~/.vim/tags/drupal
+
+"Points to document with Drupal specific vim settings
+autocmd! BufNewFile,BufReadPre,FileReadPre  *.module    so ~/.vim/drupal.vim
+autocmd! BufNewFile,BufReadPre,FileReadPre  *.php       so ~/.vim/drupal.vim
